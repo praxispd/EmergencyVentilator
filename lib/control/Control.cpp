@@ -20,17 +20,41 @@
     void Control::setMaxOut(int value){
         maxRead = value;
     }
-    float Control::read(int pin){
+    float Control::read(){
         float output;
-        int rawIn = digitalRead(pin); 
+        int rawIn = digitalRead(ctrlPin); 
+        //convert range of read into range of output
         output = ((float)rawIn*(float)(minRead-maxRead)/((float)minOut-maxOut))+(float)minOut;
+        lastval = output;
         return output;
     }
 
-    float Control::avgRead(int pin, int reads){
+    float Control::avgRead(int reads, int delayTime){
         int sum = 0;
         for(int i = 0; i < reads; i++){
-            sum+=read(pin);
+            sum+=read();
+            delay(delayTime);
         }
-        return sum/reads;
+        lastval = sum/reads;
+        return lastval;
+    }
+
+    float Control::safeRead(){
+        //reads and checks values havent changed too much
+        float output;
+        int rawIn = digitalRead(ctrlPin); 
+        output = ((float)rawIn*(float)(minRead-maxRead)/((float)minOut-maxOut))+(float)minOut;
+        if(lastval == NULL){
+            lastval = output;
+            delay(500);
+            float checkVal = avgRead(10, 50);
+            if(abs(checkVal - lastval)>lastval*0.1){
+                read();
+            }
+        }
+        if(abs(output-lastval)>(0.1*lastval)){
+            read();
+        }
+        lastval = output;
+        return output;
     }

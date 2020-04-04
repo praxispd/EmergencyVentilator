@@ -18,26 +18,41 @@
     #define LOG(...)
 #endif
 
-void setup(){
-#ifdef DEBUG
-    Serial.begin(115200);
-    Serial.println("Debug on");
-#endif
-Pump pump_positivePressure = Pump(1);
-Pump pump_NegitivePressure = Pump(2);
-
+//create control objects
 Control Control_BreathPerMin = Control(anaBPMin);
 Control Control_BreathVolume = Control(anaBVol);
 Control Control_BreathPause = Control(anaBPause);
+
+//create pump objects
+Pump pump_positivePressure = Pump(ctrlPosPump);
+Pump pump_negitivePressure = Pump(ctrlNegPump);
+
+
+
+
+void setup(){
+#ifdef DEBUG
+    Serial.begin(115200);
+    Serial.println(F("Debug on"));
+#endif
 
 #ifdef TEST
     runTestCode();
 #endif
 
+
+ //------------------initialize ISRs------------------//
+
 }
 
 void loop(){
-    delay(1000);
-    Serial.println("test");
+    //read freq vol and control levels
+    BPMin = Control_BreathPerMin.safeRead();
+    BVol = Control_BreathVolume.safeRead();
+    BPause = Control_BreathPause.safeRead();
+    
+    //calc pump DCs
+
+    //Set pump Interrupt
 
 }

@@ -2,14 +2,14 @@
 #define PINS_H
 
 //place pin assignments here
-const int ctrlFwdPump;
-const int ctrlRevPump;
+const int ctrlPosPump;
+const int ctrlNegPump;
 const int ctrlHumidifier;
 const int ctrlHeaterconst;
 
-const float anaHumid;
-const float anaHeater;
-const float anaBPause;
-const float anaBVol;
-const float anaBPMin;
+const int anaHumid;
+const int anaHeater;
+const int anaBPause;
+const int anaBVol;
+const int anaBPMin;
 #endif

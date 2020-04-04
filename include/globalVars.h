@@ -8,8 +8,8 @@
 
 //place device specific global vars here
 
-float BPM;  //breaths per minute
-float BV; //volume of a breath (pressure)
-float BP;//pause between breaths
+float BPMin;//breaths per minute
+float BVol; //volume of a breath (pressure)
+float BPause; //pause between breaths
 
 #endif

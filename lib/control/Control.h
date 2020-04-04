@@ -4,7 +4,6 @@
 
 class Control{
     public:
-
     Control(int pin, int minRead=0,int maxRead=1023, float minOut=0, float maxOut=100);
     
     void setMaxRead(int value);
@@ -12,10 +11,13 @@ class Control{
     void setMinOut(int value);
     void setMaxOut(int value);
 
-    float read(int pin);
-    float avgRead(int pin, int reads);
+    float read();
+    float avgRead(int reads, int delayTime);
+    float safeRead();
 
     protected:
+        float lastval;
+        int ctrlPin;
         int minRead;
         int maxRead;
         int minOut;
