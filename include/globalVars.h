@@ -1,6 +1,11 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+//settings
+#define DEBUG
+#define TEST
+
+
 //place device specific global vars here
 
 float BPM;  //breaths per minute

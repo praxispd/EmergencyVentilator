@@ -1,0 +1,24 @@
+/*
+This is a test file sample
+
+To use:
+    -copy this file into a new test header <test_relevantName.h>
+    -Modify the function name to be relevant
+    -add header in test.h & comment out unless used
+    -add func name under header (also commented) to allow easy access
+    -when running test uncomment header and add function in test.h
+*/
+
+bool test#(){
+    T_LOGLN(F("Testing beginning for test"));
+    
+    //test 1
+    if(function())
+        LOGLN("#1- pass <relevant info> test");
+    
+    //test 2
+    if(function())
+        LOGLN("#2- pass <relevant info> test");
+    
+
+}

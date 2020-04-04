@@ -1,4 +1,5 @@
 #include <Pump.h>
+#include <Arduino.h>
 
 Pump::Pump(int pin){
 
