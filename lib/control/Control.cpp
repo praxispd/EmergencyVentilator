@@ -1,7 +1,7 @@
 #include <Control.h>
 #include <Arduino.h>
 
-    Control::Control(int pin, int minRead,int maxRead, float minOut, float maxOut){
+    Control::Control(int pin, int minRead=0,int maxRead=1023, float minOut=0, float maxOut=100){
         Control::minRead = minRead;
         Control::maxRead = maxRead;
         Control::minOut = minOut;

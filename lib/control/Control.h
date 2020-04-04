@@ -5,7 +5,7 @@
 class Control{
     public:
 
-    Control(int pin, int minRead,int maxRead, float minOut, float maxOut);
+    Control(int pin, int minRead=0,int maxRead=1023, float minOut=0, float maxOut=100);
     
     void setMaxRead(int value);
     void setMinRead(int value);
@@ -20,6 +20,7 @@ class Control{
         int maxRead;
         int minOut;
         int maxOut;
+
 
 };
 
