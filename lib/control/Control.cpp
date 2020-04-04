@@ -46,8 +46,8 @@
         output = ((float)rawIn*(float)(minRead-maxRead)/((float)minOut-maxOut))+(float)minOut;
         if(lastval == NULL){
             lastval = output;
-            delay(500);
-            float checkVal = avgRead(10, 50);
+            delay(100);
+            float checkVal = avgRead(10, 10);
             if(abs(checkVal - lastval)>lastval*0.1){
                 read();
             }

@@ -1,5 +1,5 @@
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef E_VENT_H
+#define E_VENT_H
 
 //settings
 #define DEBUG

@@ -30,6 +30,8 @@ Pump pump_negitivePressure = Pump(ctrlNegPump);
 
 
 
+
+
 void setup(){
 #ifdef DEBUG
     Serial.begin(115200);
@@ -40,8 +42,19 @@ void setup(){
     runTestCode();
 #endif
 
-
  //------------------initialize ISRs------------------//
+  //initialize TIMER1 for blink
+  noInterrupts(); //disable all interrupts
+  TCCR1A = 0; //control register A
+  TCCR1B = 0; //control register B
+  TCNT1 = 0; //counter register
+  OCR1A = 62500; //compare match register (16MHz/64 -> 8Hz)
+  TCCR1B |= (1 << WGM12); //CTC mode (clear timer on compare)
+  TCCR1B |= (1 << CS12); //256 prescaler
+  TIMSK1 |= (1 << OCIE1A); //enable timer compare interrupt
+  interrupts(); //enable all interrupts
+
+
 
 }
 
