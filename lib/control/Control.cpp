@@ -6,6 +6,7 @@
         Control::maxRead = maxRead;
         Control::minOut = minOut;
         Control::maxOut = maxOut;
+        Control::ctrlPin = pin;
     }
 
     void Control::setMaxRead(int value){
@@ -20,9 +21,10 @@
     void Control::setMaxOut(int value){
         maxRead = value;
     }
+
     float Control::read(){
         float output;
-        int rawIn = digitalRead(ctrlPin); 
+        int rawIn = analogRead(ctrlPin); 
         //convert range of read into range of output
         output = ((float)rawIn*(float)(minRead-maxRead)/((float)minOut-maxOut))+(float)minOut;
         lastval = output;
@@ -42,18 +44,18 @@
     float Control::safeRead(){
         //reads and checks values havent changed too much
         float output;
-        int rawIn = digitalRead(ctrlPin); 
+        int rawIn = analogRead(ctrlPin); 
         output = ((float)rawIn*(float)(minRead-maxRead)/((float)minOut-maxOut))+(float)minOut;
         if(lastval == NULL){
             lastval = output;
             delay(100);
             float checkVal = avgRead(10, 10);
             if(abs(checkVal - lastval)>lastval*0.1){
-                read();
+                output = read();
             }
         }
-        if(abs(output-lastval)>(0.1*lastval)){
-            read();
+        else if(abs(output-lastval)>(0.1*lastval)){
+            output = read();
         }
         lastval = output;
         return output;

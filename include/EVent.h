@@ -12,4 +12,10 @@ float BPMin;//breaths per minute
 float BVol; //volume of a breath (pressure)
 float BPause; //pause between breaths
 
+enum state{
+    inhale,
+    exhale,
+    pause
+};
+
 #endif

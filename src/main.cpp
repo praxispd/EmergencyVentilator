@@ -29,9 +29,6 @@ Pump pump_negitivePressure = Pump(ctrlNegPump);
 
 
 
-
-
-
 void setup(){
 #ifdef DEBUG
     Serial.begin(115200);
@@ -42,7 +39,7 @@ void setup(){
     runTestCode();
 #endif
 
- //------------------initialize ISRs------------------//
+ //------------------initialize ISPs------------------//
   //initialize TIMER1 for blink
   noInterrupts(); //disable all interrupts
   TCCR1A = 0; //control register A
