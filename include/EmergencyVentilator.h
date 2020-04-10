@@ -19,6 +19,7 @@
 const int ctrlHBrInA = 40;
 const int ctrlHBrInB = 41;
 const int ctrlHBrSel = 42;
+const int ctrlHBrEn = 8;
 const int ctrlSol = 52;
 const int ctrlOutPump = 53;
 const int pwmInPump = 2;

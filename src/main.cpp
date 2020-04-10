@@ -20,6 +20,7 @@ ISR(TIMER1_COMPA_vect) {
             digitalWrite(ctrlHBrInA, LOW);
             digitalWrite(ctrlHBrInB, LOW);
             digitalWrite(ctrlHBrSel, LOW);
+            digitalWrite(ctrlHBrEn, LOW);
             analogWrite(pwmInPump, 0);
             digitalWrite(ctrlOutPump, HIGH);
 
@@ -37,6 +38,7 @@ ISR(TIMER1_COMPA_vect) {
             digitalWrite(ctrlHBrInA, LOW);
             digitalWrite(ctrlHBrInB, LOW);
             digitalWrite(ctrlHBrSel, LOW);
+            digitalWrite(ctrlHBrEn, LOW);
             analogWrite(pwmInPump, 0);
             digitalWrite(ctrlOutPump, HIGH);
 
@@ -54,6 +56,7 @@ ISR(TIMER1_COMPA_vect) {
             digitalWrite(ctrlHBrInA, HIGH);
             digitalWrite(ctrlHBrInB, LOW);
             digitalWrite(ctrlHBrSel, HIGH);
+            digitalWrite(ctrlHBrEn, HIGH);
             analogWrite(pwmInPump, (int) round(pumpLevel*2.55)); // 0-100 -> 0-255
             digitalWrite(ctrlOutPump, LOW);
 
@@ -74,6 +77,7 @@ void setup() {
     pinMode(ctrlHBrInA, OUTPUT);
     pinMode(ctrlHBrInB, OUTPUT);
     pinMode(ctrlHBrSel, OUTPUT);
+    pinMode(ctrlHBrEn, OUTPUT);
     pinMode(ctrlSol, OUTPUT);
     pinMode(pwmInPump, OUTPUT);
     pinMode(ctrlOutPump, OUTPUT);
@@ -116,6 +120,7 @@ void setup() {
     digitalWrite(ctrlHBrInA, LOW);
     digitalWrite(ctrlHBrInB, LOW);
     digitalWrite(ctrlHBrSel, LOW);
+    digitalWrite(ctrlHBrEn, LOW);
     analogWrite(pwmInPump, 0);
 
     // Initialize negative pump
