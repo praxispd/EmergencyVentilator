@@ -17,6 +17,9 @@ ISR(TIMER1_COMPA_vect) {
     switch (enmState) {
         case inhale:
             // Set exhale pump action
+            digitalWrite(ctrlHBrInA, LOW);
+            digitalWrite(ctrlHBrInB, LOW);
+            digitalWrite(ctrlHBrSel, LOW);
             analogWrite(pwmInPump, 0);
             digitalWrite(ctrlOutPump, HIGH);
 
@@ -31,6 +34,9 @@ ISR(TIMER1_COMPA_vect) {
 
         case pause:
             // Set pause pump action
+            digitalWrite(ctrlHBrInA, LOW);
+            digitalWrite(ctrlHBrInB, LOW);
+            digitalWrite(ctrlHBrSel, LOW);
             analogWrite(pwmInPump, 0);
             digitalWrite(ctrlOutPump, HIGH);
 
@@ -45,6 +51,9 @@ ISR(TIMER1_COMPA_vect) {
 
         case exhale:
             // Set exhale pump action
+            digitalWrite(ctrlHBrInA, HIGH);
+            digitalWrite(ctrlHBrInB, LOW);
+            digitalWrite(ctrlHBrSel, HIGH);
             analogWrite(pwmInPump, (int) round(pumpLevel*2.55)); // 0-100 -> 0-255
             digitalWrite(ctrlOutPump, LOW);
 
@@ -104,9 +113,9 @@ void setup() {
     sei(); //enable all interrupts
 
     // Initialize postive pump
-    digitalWrite(ctrlHBrInA, HIGH);
+    digitalWrite(ctrlHBrInA, LOW);
     digitalWrite(ctrlHBrInB, LOW);
-    digitalWrite(ctrlHBrSel, HIGH);
+    digitalWrite(ctrlHBrSel, LOW);
     analogWrite(pwmInPump, 0);
 
     // Initialize negative pump
