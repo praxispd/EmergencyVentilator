@@ -81,8 +81,12 @@ void setup() {
     CLKPR = (1 << CLKPS2); // 1 MHz
 #endif
 
-    // Set PWM prescaler to 0
-    // TCCR3A = (1 << CS30);
+    // Set PWM prescaler
+    TCCR4A = TCCR4A & 0b11111000 | 0b00000001; // no prescaler
+    // TCCR4A = TCCR4A & 0b11111000 | 0b00000010; // 8
+    // TCCR4A = TCCR4A & 0b11111000 | 0b00000011; // 64
+    // TCCR4A = TCCR4A & 0b11111000 | 0b00000100; // 256
+    // TCCR4A = TCCR4A & 0b11111000 | 0b00000101; // 1024
 
     // TIMER1 interrupt
     TCCR1A = 0; // control register A
