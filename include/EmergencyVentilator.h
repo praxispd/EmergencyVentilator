@@ -38,7 +38,7 @@ enum State {
     pause
 };
 
-State mchState = inhale; // machine state
+State enmState = inhale; // machine state
 
 // Inhale length (s)
 const unsigned int inhaleSecs = 1;
