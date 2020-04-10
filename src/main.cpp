@@ -82,11 +82,11 @@ void setup() {
 #endif
 
     // Set PWM prescaler
-    TCCR4A = TCCR4A & 0b11111000 | 0b00000001; // no prescaler
-    // TCCR4A = TCCR4A & 0b11111000 | 0b00000010; // 8
-    // TCCR4A = TCCR4A & 0b11111000 | 0b00000011; // 64
-    // TCCR4A = TCCR4A & 0b11111000 | 0b00000100; // 256
-    // TCCR4A = TCCR4A & 0b11111000 | 0b00000101; // 1024
+    TCCR3B = TCCR3B & 0b11111000 | 0b00000001; // no prescaler
+    // TCCR3B = TCCR3B & 0b11111000 | 0b00000010; // 8
+    // TCCR3B = TCCR3B & 0b11111000 | 0b00000011; // 64
+    // TCCR3B = TCCR3B & 0b11111000 | 0b00000100; // 256
+    // TCCR3B = TCCR3B & 0b11111000 | 0b00000101; // 1024
 
     // TIMER1 interrupt
     TCCR1A = 0; // control register A
