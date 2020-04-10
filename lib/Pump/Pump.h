@@ -1,8 +1,7 @@
 #ifndef PUMP_H
 #define PUMP_H
-#include <Control.h>
 
-class Pump{
+class Pump {
   public:
 
     Pump(int pin);

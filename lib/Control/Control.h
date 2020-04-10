@@ -1,10 +1,10 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
-
-class Control{
+class Control {
     public:
-    Control(int pin, int minRead=0,int maxRead=1023, float minOut=0, float maxOut=100);
+
+    Control(int pin, float minOut = 0, float maxOut = 100, int minRead = 0, int maxRead = 1023);
     
     void setMaxRead(int value);
     void setMinRead(int value);
@@ -16,14 +16,13 @@ class Control{
     float safeRead();
 
     protected:
-        float lastval;
-        int ctrlPin;
+
+        int pin;
+        float minOut;
+        float maxOut;
         int minRead;
         int maxRead;
-        int minOut;
-        int maxOut;
-
-
+        float lastRead;
 };
 
 #endif
