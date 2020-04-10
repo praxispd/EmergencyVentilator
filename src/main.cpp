@@ -14,11 +14,11 @@ Control powerControl = Control(anaPower, limPowerLow, limPowerHigh);
 // Pump pumpNegative = Pump(ctrlNegPump);
 
 ISR(TIMER1_COMPA_vect) {
-    switch (mchState) {
+    switch (enmState) {
         case inhale:
             // Set exhale pump action
-            analogWrite(pwmPosPump, 0);
-            analogWrite(pwmNegPump, 100);
+            analogWrite(pwmInPump, 0);
+            digitalWrite(ctrlOutPump, HIGH);
 
             // Open solenoid
             digitalWrite(ctrlSol, HIGH);
@@ -26,13 +26,13 @@ ISR(TIMER1_COMPA_vect) {
             // Set timer
             OCR1A = exhaleTime;
             // Set state
-            mchState = exhale; // skip pause for now
+            enmState = exhale; // skip pause for now
         break;
 
         case pause:
             // Set pause pump action
-            analogWrite(pwmPosPump, 0);
-            analogWrite(pwmNegPump, 0);
+            analogWrite(pwmInPump, 0);
+            digitalWrite(ctrlOutPump, HIGH);
 
             // Open solenoid
             digitalWrite(ctrlSol, HIGH);
@@ -40,13 +40,13 @@ ISR(TIMER1_COMPA_vect) {
             // Reset timer
             OCR1A = exhaleTime;
             // Set state
-            mchState = exhale;
+            enmState = exhale;
         break;
 
         case exhale:
             // Set exhale pump action
-            analogWrite(pwmPosPump, (int) round(pumpLevel*2.55)); // 0-100 -> 0-255
-            analogWrite(pwmNegPump, 0);
+            analogWrite(pwmInPump, (int) round(pumpLevel*2.55)); // 0-100 -> 0-255
+            digitalWrite(ctrlOutPump, LOW);
 
             // Close solenoid
             digitalWrite(ctrlSol, LOW);
@@ -54,7 +54,7 @@ ISR(TIMER1_COMPA_vect) {
             // Reset timer
             OCR1A = inhaleTime;
             // Set state
-            mchState = inhale;
+            enmState = inhale;
         break;
     };
 }
@@ -66,8 +66,8 @@ void setup() {
     pinMode(ctrlHBrInB, OUTPUT);
     pinMode(ctrlHBrSel, OUTPUT);
     pinMode(ctrlSol, OUTPUT);
-    pinMode(pwmPosPump, OUTPUT);
-    pinMode(pwmNegPump, OUTPUT);
+    pinMode(pwmInPump, OUTPUT);
+    pinMode(ctrlOutPump, OUTPUT);
     // pinMode(anaBreath, INPUT);
     pinMode(anaBPM, INPUT);
     pinMode(anaPause, INPUT);
@@ -103,10 +103,10 @@ void setup() {
     digitalWrite(ctrlHBrInA, HIGH);
     digitalWrite(ctrlHBrInB, LOW);
     digitalWrite(ctrlHBrSel, HIGH);
-    analogWrite(pwmPosPump, 0);
+    analogWrite(pwmInPump, 0);
 
     // Initialize negative pump
-    analogWrite(pwmNegPump, 0);
+    digitalWrite(ctrlOutPump, LOW);
 
     // Initialize solenoid closed
     digitalWrite(ctrlSol, LOW);

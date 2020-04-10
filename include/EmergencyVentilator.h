@@ -19,9 +19,9 @@
 const int ctrlHBrInA = 40;
 const int ctrlHBrInB = 41;
 const int ctrlHBrSel = 42;
-const int ctrlSol = 30;
-const int pwmPosPump = 2;
-const int pwmNegPump = 3;
+const int ctrlSol = 52;
+const int ctrlOutPump = 53;
+const int pwmInPump = 2;
 // const int ctrlHumidifier;
 // const int ctrlHeater;
 // const int anaHumid;
