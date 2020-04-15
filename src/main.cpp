@@ -16,7 +16,7 @@ Control powerControl = Control(anaPower, limPowerLow, limPowerHigh);
 ISR(TIMER1_COMPA_vect) {
     switch (enmState) {
         case inhale:
-            // Set exhale pump action
+            // Set exhale on pump action
             digitalWrite(ctrlHBrInA, LOW);
             digitalWrite(ctrlHBrInB, LOW);
             digitalWrite(ctrlHBrSel, LOW);
@@ -28,10 +28,10 @@ ISR(TIMER1_COMPA_vect) {
             digitalWrite(ctrlSol, HIGH);
 
             // Set timer
-            OCR1A = exhaleTime;
+            OCR1A = round((exhaleOnTime/1000.0)*timerCycles);
             // Set state
-            enmState = exhale; // skip pause for now
-        break;
+            enmState = exhaleOn; // skip pause for now
+            break;
 
         case pause:
             // Set pause pump action
@@ -46,13 +46,30 @@ ISR(TIMER1_COMPA_vect) {
             digitalWrite(ctrlSol, HIGH);
 
             // Reset timer
-            OCR1A = exhaleTime;
+            OCR1A = round((exhaleOnTime/1000.0)*timerCycles);
             // Set state
-            enmState = exhale;
-        break;
+            enmState = exhaleOn;
+            break;
 
-        case exhale:
-            // Set exhale pump action
+        case exhaleOn:
+            if (exhaleOffTime > 0) {
+                // Set exhale off pump action
+                digitalWrite(ctrlHBrInA, LOW);
+                digitalWrite(ctrlHBrInB, LOW);
+                digitalWrite(ctrlHBrSel, LOW);
+                digitalWrite(ctrlHBrEn, LOW);
+                analogWrite(pwmInPump, 0); // 0-100 -> 0-255
+                digitalWrite(ctrlOutPump, LOW);
+
+                // Reset timer
+                OCR1A = round((exhaleOffTime/1000.0)*timerCycles);
+                // Set state
+                enmState = exhaleOff;
+                break;
+            }
+
+        case exhaleOff:
+            // Set inhale pump action
             digitalWrite(ctrlHBrInA, HIGH);
             digitalWrite(ctrlHBrInB, LOW);
             digitalWrite(ctrlHBrSel, HIGH);
@@ -64,10 +81,10 @@ ISR(TIMER1_COMPA_vect) {
             digitalWrite(ctrlSol, LOW);
 
             // Reset timer
-            OCR1A = inhaleTime;
+            OCR1A = round((inhaleTime/1000.0)*timerCycles);
             // Set state
             enmState = inhale;
-        break;
+            break;
     };
 }
 
@@ -145,17 +162,65 @@ void loop() {
     // breathTime = (int) round(((float) map(analogRead(anaBreath), 0, 1023, limBreathLow, limBreathHigh)/1000)*15625);
     // pauseTime = (int) round(((float) map(analogRead(anaPause), 0, 1023, limPauseLow, limPauseHigh)/1000)*15625);
 
+    // Breaths per minute
     static float BPM;
+
+    /*
+    It: Inhale Time (ms)
+    Ip: Inhale Power (%)
+    Iv: Inhale Volume
+
+        Iv = It*Ip
+
+    Et: Exhale Time (ms)
+    Etp: Exhale Pump Time (ms)
+    Etw: Exhale Power (%)
+    Ev: Exhale Volume
+
+        Et = Etp + Etw
+        Ev = Etp*Ep
+
+    To maintain equal water levels in each chamber:
+
+        Iv = Ev
+    */
     
     BPM = bpmControl.read();
-    exhaleTime = (60/BPM - inhaleSecs)*timerCycles;
+    exhaleTime = (60/BPM - inhaleSecs)*1000;
 
-    pumpLevel = round(powerControl.read());
+    /*
+    Limit input power when It > Et:
+
+        Iv = Ev
+        It*Ip = Etp*Ep
+        1000*Ip = Etp*100
+        Etp = 10*Ip
+
+        Et >= Etp
+        Et >= 10*Ip
+        Ip <= Et/10
+    */
+    pumpLevel = min(exhaleTime/10.0, powerControl.read());
+
+    exhaleOnTime = min(round(pumpLevel*10), exhaleTime);
+    exhaleOffTime = exhaleTime - exhaleOnTime;
 
     LOG("\nBPM: ");
     LOGLN(BPM, 2);
     LOG("Power: ");
-    LOGLN(pumpLevel);
+    LOGLN(pumpLevel, 2);
+    LOG("Inhale Time: ");
+    LOGLN(inhaleTime);
+    LOG("Exhale Time: ");
+    LOGLN(exhaleTime);
+    LOG("Exhale On Time: ");
+    LOGLN(exhaleOnTime);
+    LOG("Exhale Off Time: ");
+    LOGLN(exhaleOffTime);
+    LOG("Inhale Volume: ");
+    LOGLN(pumpLevel*1000, 0);
+    LOG("Exhale Volume: ");
+    LOGLN(100*exhaleOnTime);
 
 #ifdef _1MHZ
     delay(50);

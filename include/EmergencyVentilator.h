@@ -35,7 +35,8 @@ const int anaPower = A13;
 // Machine state
 enum State {
     inhale,
-    exhale,
+    exhaleOn, // Pump on
+    exhaleOff, // Pump off
     pause
 };
 
@@ -69,13 +70,15 @@ const unsigned int timerCycles = 3906; // timer prescaler 256 (1M/256)
 const unsigned int timerCycles = 15625; // timer prescaler 1024 (16M/1024)
 #endif
 
-// Timer values
+// Timings (ms)
 // unsigned int breathTime = 0;
 // unsigned int pauseTime = 0; 
-unsigned int inhaleTime = inhaleSecs*timerCycles;
-unsigned int exhaleTime = inhaleSecs*timerCycles;
+unsigned int inhaleTime = inhaleSecs*1000;
+unsigned int exhaleTime = inhaleSecs*1000;
+unsigned int exhaleOnTime = inhaleSecs*1000;
+unsigned int exhaleOffTime = 0;
 
 // Pump power level
-unsigned int pumpLevel = 0;
+float pumpLevel = 100;
 
 #endif
