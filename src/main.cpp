@@ -2,22 +2,16 @@
 #include <HardwareSerial.h>
 #include <globals.h>
 #include <readable.h>
-#include <oneBreath.h>
+#include <graph.h>
 
 
 void setup() {
   Serial.begin(9600);
   timer = millis();
   #ifdef CSV
-  Serial.print("reading interval is: ");
-  Serial.print(time);
-  Serial.println("miliseconds");
-  Serial.println("Pres-Avg,Pres-Min,Pres-Max,Flow-Avg,Flow-Min,Flow-Max,elapsed-time;");
+  Serial.println("inhale_duration(ms),exhale_duration(ms),volume(ml),Flow-Max,Flow-Avg,Flow-Max,Pres-Min,Pres-Avg,Pres-Max,");
   #endif
   #ifdef HUMAN
-  Serial.print("reading interval is: ");
-  Serial.print(time);
-  Serial.println("miliseconds");
   Serial.println("this is the human readable format");
   #endif
   #ifdef ERROR
@@ -26,20 +20,23 @@ void setup() {
   Serial.println("miliseconds");
   Serial.println("this is the error reporting only format");
   #endif
-  #ifdef ONEBREATH
+  #ifdef GRAPH
   Serial.println("pressure flow");
   Serial.println(" ");
   #endif
 }
 
 void loop() {
-  #ifndef ERROR
- // func();
+  #ifdef HUMAN
+    func();
+  #endif
+  #ifdef CSV
+    func();
   #endif
   #ifdef ERROR
   Error_func();
   #endif
-  #ifdef ONEBREATH
-  oneBreath();
+  #ifdef GRAPH
+  graph();
   #endif
 }

@@ -1,8 +1,11 @@
-#ifndef ONEBREATH_H
-#define ONEBREATH_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
-void oneBreath(){
+void graph(){
   long interval = 100;
+
+    smoothread(pres,flow,10);
+    /*
 
     for(long i = 0; i<interval; i++){
     presRawTotal += analogRead(presAna);
@@ -36,13 +39,15 @@ void oneBreath(){
     flow = 50;
     break;
     }   
-  }  
+  }  */
   Serial.print(pres*30);
   Serial.print(" ");
   Serial.print(flow);
+  Serial.print(" ");
+  Serial.print(threshold);
   Serial.println(" ");
- flowVol=0;
-  presVol = 0;
+  // flowVol=0;
+  // presVol = 0;
   presRawTotal = 0;
   flowRawTotal = 0;
 }
