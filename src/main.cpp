@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(9600);
   timer = millis();
   #ifdef CSV
-  Serial.println("inhale_duration(ms),exhale_duration(ms),volume(ml),Flow-Max,Flow-Avg,Flow-Max,Pres-Min,Pres-Avg,Pres-Max,");
+  Serial.println("inhale_duration(ms),exhale_duration(ms),volume(ml),Flow-Min,Flow-Avg,Flow-Max,Pres-Min,Pres-Avg,Pres-Max");
   #endif
   #ifdef HUMAN
   Serial.println("this is the human readable format");

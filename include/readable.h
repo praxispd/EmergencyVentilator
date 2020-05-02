@@ -20,11 +20,12 @@ void func(){
   unsigned long integralTimer = 0;
   unsigned long timer = millis();
   //start exhale timer
+  shortDur: ;
   while(flow<threshold){
     smoothread(pres,flow,10);
   }
   exhale_duration = millis()-timer;
-  if (exhale_duration < 100)
+  if (exhale_duration < 200)
     return;
   timer = millis();
   while(flow>=threshold){
@@ -41,7 +42,7 @@ void func(){
   }
   inhale_duration = millis()-timer;
   if(inhale_duration<100)
-    return;
+    goto shortDur;
   flow_avg = sqrt(flow_avg/counter);
   pres_avg = sqrt(pres_avg/counter);
 
@@ -68,7 +69,6 @@ void func(){
     Serial.println(pres_max);
   #endif 
   #ifdef CSV
-    Serial.print(",");
     Serial.print(inhale_duration);
     Serial.print(",");
     Serial.print(exhale_duration);
