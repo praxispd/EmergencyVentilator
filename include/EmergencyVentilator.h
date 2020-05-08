@@ -2,10 +2,9 @@
 #define EMERGENCYVENTILATOR_H
 
 // Global settings
-#define DEBUG
-
-// Clock rate
-#define _1MHZ
+// #define DEBUG
+// #define MASTER
+// #define _1MHZ
 
 #ifdef DEBUG
     #define LOGLN(...) Serial.println(__VA_ARGS__)
@@ -34,13 +33,22 @@ const int anaPower = A13;
 
 // Machine state
 enum State {
+    idle,
     inhale,
     exhaleOn, // Pump on
     exhaleOff, // Pump off
     pause
 };
 
-State enmState = inhale; // machine state
+// machine state
+#ifdef MASTER
+    volatile State enmState = inhale;
+#else
+    volatile State enmState = idle;
+#endif
+State enmMasterState = idle;
+bool failover = false;
+volatile bool newState = false;
 
 // Inhale length (s)
 const unsigned int inhaleSecs = 1;
@@ -80,5 +88,10 @@ unsigned int exhaleOffTime = 0;
 
 // Pump power level
 float pumpLevel = 100;
+
+// Send state and timer counter to SLAVE
+void sendData();
+// Recieve state and timer counter from MASTER 
+bool receiveData();
 
 #endif
