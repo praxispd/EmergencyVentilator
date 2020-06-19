@@ -6,6 +6,9 @@
 #include "Control.h"
 #include "Pump.h"
 #include "EmergencyVentilator.h"
+#ifdef TEST
+    #include "test/test.h"
+#endif
 
 Control bpmControl = Control(anaBPM, limBPMLow, limBPMHigh);
 // Control conPause = Control(anaPause);
@@ -21,7 +24,7 @@ ISR(TIMER1_COMPA_vect) {
         case idle: break;
         case inhale:
             OCR1A = round((exhaleOnTime/1000.0)*timerCycles);
-            LOG("ExhaleOn time: ");
+            LOG(F("ExhaleOn time: "));
             LOGLN(exhaleOnTime);
             enmState = exhaleOn; // skip pause for now
             break;
@@ -33,14 +36,14 @@ ISR(TIMER1_COMPA_vect) {
             // Skip to inhale if no exhale off time
             if (exhaleOffTime > 0) {
                 OCR1A = round((exhaleOffTime/1000.0)*timerCycles);
-                LOG("ExhaleOff time: ");
+                LOG(F("ExhaleOff time: "));
                 LOGLN(exhaleOffTime);
                 enmState = exhaleOff;
                 break;
             }
         case exhaleOff:
             OCR1A = round((inhaleTime/1000.0)*timerCycles);
-            LOG("Inhale time: ");
+            LOG(F("Inhale time: "));
             LOGLN(inhaleTime);
             enmState = inhale;
             break;
@@ -122,6 +125,10 @@ void setup() {
     Serial1.begin(9600);
     Serial1.setTimeout(300);
 
+#ifdef TEST
+    runTestCode();
+#endif
+
 #ifndef MASTER
     delay(5000);
 #endif
@@ -195,21 +202,21 @@ void loop() {
     exhaleOnTime = min(round(pumpLevel*10), exhaleTime);
     exhaleOffTime = exhaleTime - exhaleOnTime;
 
-    // LOG("\nBPM: ");
+    // LOG(F("\nBPM: "));
     // LOGLN(BPM, 2);
-    // LOG("Power: ");
+    // LOG(F("Power: "));
     // LOGLN(pumpLevel, 2);
-    // LOG("Inhale Time: ");
+    // LOG(F("Inhale Time: "));
     // LOGLN(inhaleTime);
-    // LOG("Exhale Time: ");
+    // LOG(F("Exhale Time: "));
     // LOGLN(exhaleTime);
-    // LOG("Exhale On Time: ");
+    // LOG(F("Exhale On Time: "));
     // LOGLN(exhaleOnTime);
-    // LOG("Exhale Off Time: ");
+    // LOG(F("Exhale Off Time: "));
     // LOGLN(exhaleOffTime);
-    // LOG("Inhale Volume: ");
+    // LOG(F("Inhale Volume: "));
     // LOGLN(pumpLevel*1000, 0);
-    // LOG("Exhale Volume: ");
+    // LOG(F("Exhale Volume: "));
     // LOGLN(100*exhaleOnTime);
 
     // Peripheral control
@@ -299,11 +306,11 @@ void sendData() {
     strcat(comBuffer, comState);
     strcat(comBuffer, comCounter);
 
-    LOG("State: ");
+    LOG(F("State: "));
     LOGLN(comState);
-    LOG("Counter: ");
+    LOG(F("Counter: "));
     LOGLN(comCounter);
-    LOG("Buffer: ");
+    LOG(F("Buffer: "));
     LOGLN(comBuffer);
 
     Serial1.write(comBuffer, 7);
@@ -324,7 +331,7 @@ bool receiveData() {
     unsigned long start = millis();
     while ((char) Serial1.read() != '%') {
         if ((millis() - start) > 300) {
-            LOGLN("Read timeout");
+            LOGLN(F("Read timeout"));
             return false;
         }
     }
@@ -333,7 +340,7 @@ bool receiveData() {
     size_t bytes = Serial1.readBytes(comBuffer, 6);
     if ((int) bytes != 6) {
         // Incorrect amount of chars read
-        LOG("Incorrect number of bytes read: ");
+        LOG(F("Incorrect number of bytes read: "));
         LOGLN(bytes);
         return false;
     }
@@ -352,16 +359,16 @@ bool receiveData() {
     recCounter = atoi(comCounter);
     recState = atoi(comState);
 
-    LOG("Buffer: ");
+    LOG(F("Buffer: "));
     LOGLN(comBuffer);
-    LOG("State: ");
+    LOG(F("State: "));
     LOGLN(recState);
-    LOG("Counter: ");
+    LOG(F("Counter: "));
     LOGLN(recCounter);
 
     // Verify sensible state value
     if (recState < 0 || recState > 4) {
-        LOGLN("Invalid state");
+        LOGLN(F("Invalid state"));
         return false;
     }
 

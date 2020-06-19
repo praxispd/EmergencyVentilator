@@ -2,9 +2,11 @@
 #define EMERGENCYVENTILATOR_H
 
 // Global settings
-// #define DEBUG
+ #define DEBUG
 // #define MASTER
 // #define _1MHZ
+ #define TEST
+
 
 #ifdef DEBUG
     #define LOGLN(...) Serial.println(__VA_ARGS__)
